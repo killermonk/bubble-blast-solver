@@ -9,13 +9,16 @@ function GameBoard() {
 $.extend(GameBoard.prototype, {
 	MAX_BUBBLE_HITS: 4,
 
-	async_solve: function(max_touches, callback) {
+	async_solve: function(max_touches) {
 		var that = this;
-		var defer = $.Deferred(function(d) {
-			var clicks = that.solve(max_touches);
-			d.resolve(clicks);
+		var defer = $.Deferred(function(d){
+			setTimeout(function(){
+				var clicks = that.solve(max_touches);
+				d.resolve(clicks);
+			}, 0);
 		});
-		return defer.done(callback).promise();
+
+		return defer;
 	},
 
 	solve: function(max_touches) {

@@ -11,6 +11,21 @@
 	background-color: aqua;
 }
 
+#Spinner {
+	display: none;
+}
+#Spinner.thinking {
+	display: block;
+}
+.loading {
+	width: 35px;
+	height: 35px;
+	margin-left: 15px;
+	background: rgba(255, 255, 255, .8)
+		url('http://i.stack.imgur.com/FhHRx.gif')
+		50% 50% no-repeat;
+}
+
 #Options {
 	margin-top: 15px;
 }

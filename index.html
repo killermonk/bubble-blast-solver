@@ -62,19 +62,27 @@
 						alert("Please input a number between 1 and 10 for touches");
 						$('#MaxTouches').select();
 					} else {
+						$('#Spinner').addClass('thinking');
 						initBoard();
-						board.async_solve(touches, function(clicks) {
-							initBoard();
+						board.async_solve(touches)
+							.always(function() {
+								$('#Spinner').removeClass('thinking');
+							})
+							.fail(function() {
+								$('#Solution').append("Couldn't find a solution, but we tried!");
+							})
+							.done(function(clicks) {
+								$('#Spinner').removeClass('thinking');
+								initBoard();
+								$.each(clicks, function(i, coords){
+									var container = $('<div><span>Step ' + (i+1) + '<br /></div>');
 
-							$.each(clicks, function(i, coords){
-								var container = $('<div><span>Step ' + (i+1) + '<br /></div>');
+									container.append(board.toHTML(coords[0], coords[1]));
+									board.poke(coords[0], coords[1]);
 
-								container.append(board.toHTML(coords[0], coords[1]));
-								board.poke(coords[0], coords[1]);
-
-								$('#Solution').append(container);
+									$('#Solution').append(container);
+								});
 							});
-						});
 					}
 				});
 			});
@@ -91,6 +99,9 @@
 			</form>
 		</div>
 		<br />
+		<div id="Spinner">
+			<div class="loading"></div>
+		</div>
 		<div id="Solution"></div>
 	</body>
 </html>
