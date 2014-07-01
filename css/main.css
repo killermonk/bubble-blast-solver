@@ -1,0 +1,44 @@
+#GameBoard td,
+#Solution td {
+	width: 25px;
+	height: 25px;
+}
+
+#Solution >div {
+	margin: 5px;
+}
+#Solution td.highlight {
+	background-color: aqua;
+}
+
+#Options {
+	margin-top: 15px;
+}
+
+.cell div {
+	margin: auto;
+}
+.cell.hit0 div {
+	width: 5px;
+	height: 5px;
+	border-radius: 5px;
+	background-color: blue;
+}
+.cell.hit1 div {
+	width: 10px;
+	height: 10px;
+	border-radius: 10px;
+	background-color: #FFD700;
+}
+.cell.hit2 div {
+	width: 15px;
+	height: 15px;
+	border-radius: 15px;
+	background-color: green;
+}
+.cell.hit3 div {
+	width: 20px;
+	height: 20px;
+	border-radius: 20px;
+	background-color: red;
+}

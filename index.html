@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Bubble Blast Solver</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<link rel="stylesheet" href="css/main.css" />
+
+		<script src="js/jquery-2.1.1.min.js"></script>
+		<script src="js/library.js"></script>
+		<script src="js/board.js"></script>
+		<script>
+			$(document).ready(function(){
+				$(document).bind("contextmenu", function(e) {
+					var target = e.target;
+					if ($(target).attr('nocontext') || jQuery.data(target).nocontext) {
+						e.preventDefault();
+						return false;
+					}
+				});
+
+				$('#MaxTouches').ForceNumericOnly();
+				$('#MaxTouches').focus();
+
+				var board = new GameBoard();
+
+				var table = $('<table></table>');
+				table.attr('border', '1px');
+				table.NoContextMenu();
+
+				for (var y=0; y<board.height; y++) {
+					var row = $('<tr></tr>');
+					row.NoContextMenu();
+
+					for (var x=0; x<board.width; x++) {
+						var col = $('<td></td>');
+						col.BoardCell(x, y);
+						row.append(col);
+					}
+					table.append(row);
+				}
+
+				$('#GameBoard').append(table);
+
+				function initBoard() {
+					board.clear();
+					$('#GameBoard td').each(function(i, cell) {
+						var data = jQuery.data(cell);
+						if (data.hits >= 0)
+							board.add_bubble(data.x, data.y, data.hits);
+					});
+				}
+
+				$('#Options').submit(function(e){
+					e.preventDefault();
+
+					$('#Solution').empty();
+
+					var touches = $('#MaxTouches').val();
+					if (touches < 1 || touches > 10) {
+						alert("Please input a number between 1 and 10 for touches");
+						$('#MaxTouches').select();
+					} else {
+						initBoard();
+						board.async_solve(touches, function(clicks) {
+							initBoard();
+
+							$.each(clicks, function(i, coords){
+								var container = $('<div><span>Step ' + (i+1) + '<br /></div>');
+
+								container.append(board.toHTML(coords[0], coords[1]));
+								board.poke(coords[0], coords[1]);
+
+								$('#Solution').append(container);
+							});
+						});
+					}
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<div id="GameBoard"></div>
+		<div>
+			<form id="Options">
+				<label>Max Touches: </label>
+				<input id="MaxTouches" name="MaxTouches" value="" size="3" />
+				<br />
+				<input type="submit" value="Solve" />
+			</form>
+		</div>
+		<br />
+		<div id="Solution"></div>
+	</body>
+</html>
